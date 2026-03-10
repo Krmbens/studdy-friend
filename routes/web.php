@@ -26,10 +26,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/statistics/export', [StatisticsController::class, 'exportPdf'])->name('statistics.export');
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
     Route::get('/pomodoro', \App\Livewire\PomodoroTimer::class)->name('pomodoro.index');
-    Route::get('/exercise-solver', \App\Livewire\ExerciseSolver::class)->name('exercise-solver.index');
-    Route::get('/quiz', \App\Livewire\QuizGenerator::class)->name('quiz.index');
-    Route::get('/summarizer', \App\Livewire\DocumentSummarizer::class)->name('summarizer.index');
-    Route::get('/flashcards', \App\Livewire\FlashcardGenerator::class)->name('flashcards.index');
+    Route::middleware('throttle:ai-actions')->group(function () {
+        Route::get('/exercise-solver', \App\Livewire\ExerciseSolver::class)->name('exercise-solver.index');
+        Route::get('/quiz', \App\Livewire\QuizGenerator::class)->name('quiz.index');
+        Route::get('/summarizer', \App\Livewire\DocumentSummarizer::class)->name('summarizer.index');
+        Route::get('/flashcards', \App\Livewire\FlashcardGenerator::class)->name('flashcards.index');
+    });
 });
 
 Route::middleware('auth')->group(function () {
